@@ -27,6 +27,8 @@ public class DataService {
         stations.add(new Station("Flight Plan (Tunes for Travel)", "flightplanmusic"));
         stations.add(new Station("Two-Wheelin' (Biking Playlist)", "bicyclemusic"));
         stations.add(new Station("Kids Jams (Music for Children)", "kidsmusic"));
+
+        return stations;
     }
 
     public ArrayList<Station> getRecentStations() {

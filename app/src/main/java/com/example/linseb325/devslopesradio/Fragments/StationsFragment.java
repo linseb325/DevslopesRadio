@@ -1,8 +1,8 @@
 package com.example.linseb325.devslopesradio.Fragments;
 
 
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,6 +72,7 @@ public class StationsFragment extends Fragment {
         // Configuring the recycler view
         RecyclerView recyclerView = v.findViewById(R.id.recycler_stations);
         recyclerView.setHasFixedSize(true);     // Gives us some optimizations
+        recyclerView.addItemDecoration(new HorizontalSpaceItemDecorator(30));   // Spacing between station icons
 
 
         // A recycler view needs an adapter
@@ -85,14 +86,12 @@ public class StationsFragment extends Fragment {
                 adapter = new StationsAdapter(DataService.getInstance().getRecentStations());
                 break;
             case STATION_TYPE_PARTY:
-                adapter = new StationsAdapter(DataService.getInstance().getPartyStations())
+                adapter = new StationsAdapter(DataService.getInstance().getPartyStations());
                 break;
             default:
                 adapter = new StationsAdapter(new ArrayList<Station>());
                 break;
         }
-
-
 
         recyclerView.setAdapter(adapter);
 
@@ -103,14 +102,36 @@ public class StationsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
 
-
-
-
-
-
-
-
         return v;
     }
 
+
+
+    // For adding space between station icons
+    class HorizontalSpaceItemDecorator extends RecyclerView.ItemDecoration {
+
+        private final int spacer;
+
+        public HorizontalSpaceItemDecorator(int spacer) {
+            this.spacer = spacer;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.right = spacer;
+            outRect.bottom = spacer;
+            outRect.top = spacer;
+        }
+    }
+
+
+
+
+
+
+
+
 }
+
+
