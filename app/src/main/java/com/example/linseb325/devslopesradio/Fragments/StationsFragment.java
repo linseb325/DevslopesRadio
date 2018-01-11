@@ -2,6 +2,7 @@ package com.example.linseb325.devslopesradio.Fragments;
 
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.linseb325.devslopesradio.Adapters.StationsAdapter;
+import com.example.linseb325.devslopesradio.Model.Station;
 import com.example.linseb325.devslopesradio.R;
+import com.example.linseb325.devslopesradio.Services.DataService;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,34 +23,33 @@ import com.example.linseb325.devslopesradio.R;
  * create an instance of this fragment.
  */
 public class StationsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // Key for getting the stationType argument.
+    private static final String ARG_STATION_TYPE = "station_type";
+
+    // Three types of radio stations.
+    public static final int STATION_TYPE_FEATURED = 0;
+    public static final int STATION_TYPE_RECENT = 1;
+    public static final int STATION_TYPE_PARTY = 2;
+
+    private int stationType;
 
 
-    public StationsFragment() {
-        // Required empty public constructor
-    }
+    // Constructor
+    public StationsFragment() {}
 
+    // Another constructor
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param stationType The radio station's category. May be featured, recent, or party.
      * @return A new instance of fragment StationsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static StationsFragment newInstance(String param1, String param2) {
+    public static StationsFragment newInstance(int stationType) {
         StationsFragment fragment = new StationsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_STATION_TYPE, stationType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,8 +58,7 @@ public class StationsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.stationType = getArguments().getInt(ARG_STATION_TYPE);
         }
     }
 
@@ -65,18 +68,45 @@ public class StationsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_stations, container, false);
 
+
         // Configuring the recycler view
         RecyclerView recyclerView = v.findViewById(R.id.recycler_stations);
         recyclerView.setHasFixedSize(true);     // Gives us some optimizations
 
+
         // A recycler view needs an adapter
-        StationsAdapter adapter = new StationsAdapter();
+        StationsAdapter adapter;
+
+        switch (this.stationType) {
+            case STATION_TYPE_FEATURED:
+                adapter = new StationsAdapter(DataService.getInstance().getFeaturedStations());
+                break;
+            case STATION_TYPE_RECENT:
+                adapter = new StationsAdapter(DataService.getInstance().getRecentStations());
+                break;
+            case STATION_TYPE_PARTY:
+                adapter = new StationsAdapter(DataService.getInstance().getPartyStations())
+                break;
+            default:
+                adapter = new StationsAdapter(new ArrayList<Station>());
+                break;
+        }
+
+
+
         recyclerView.setAdapter(adapter);
 
-        // A recycler view also needs a layout manager
+
+        // A recycler view needs a layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
+
+
+
+
+
+
 
 
 

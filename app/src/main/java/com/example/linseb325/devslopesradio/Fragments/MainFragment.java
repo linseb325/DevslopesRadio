@@ -66,13 +66,13 @@ public class MainFragment extends Fragment {
         FragmentManager manager = getActivity().getSupportFragmentManager();
 
         // Create three StationsFragment instances and add them to the MainFragment
-        StationsFragment stationsFragmentTop = StationsFragment.newInstance("one", "two");
+        StationsFragment stationsFragmentTop = StationsFragment.newInstance(StationsFragment.STATION_TYPE_FEATURED);
         manager.beginTransaction().add(R.id.container_top_row, stationsFragmentTop).commit();
 
-        StationsFragment stationsFragmentMiddle = StationsFragment.newInstance("one", "two");
+        StationsFragment stationsFragmentMiddle = StationsFragment.newInstance(StationsFragment.STATION_TYPE_RECENT);
         manager.beginTransaction().add(R.id.container_middle_row, stationsFragmentMiddle).commit();
 
-        StationsFragment stationsFragmentBottom = StationsFragment.newInstance("one", "two");
+        StationsFragment stationsFragmentBottom = StationsFragment.newInstance(StationsFragment.STATION_TYPE_PARTY);
         manager.beginTransaction().add(R.id.container_bottom_row, stationsFragmentBottom).commit();
 
 
