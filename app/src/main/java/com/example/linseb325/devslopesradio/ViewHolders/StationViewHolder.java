@@ -18,7 +18,7 @@ public class StationViewHolder extends RecyclerView.ViewHolder {
     private TextView stationTitleTextView;
 
 
-    // Constructor
+    // Constructor. Set outlets to the itemView.
     public StationViewHolder(View itemView) {
         super(itemView);
 

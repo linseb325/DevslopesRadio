@@ -24,10 +24,12 @@ import java.util.ArrayList;
  */
 public class StationsFragment extends Fragment {
 
-    // Key for getting the stationType argument.
+    // Key for getting the stationType argument from the 'args' bundle.
     private static final String ARG_STATION_TYPE = "station_type";
 
     // Three types of radio stations.
+    // We pass a station type into the StationsFragment when we create a new instance.
+    // Later, we use it to discern which type of station data to request from the DataService.
     public static final int STATION_TYPE_FEATURED = 0;
     public static final int STATION_TYPE_RECENT = 1;
     public static final int STATION_TYPE_PARTY = 2;
@@ -43,7 +45,7 @@ public class StationsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param stationType The radio station's category. May be featured, recent, or party.
+     * @param stationType The radio stations' category. May be featured, recent, or party.
      * @return A new instance of fragment StationsFragment.
      */
     public static StationsFragment newInstance(int stationType) {
@@ -69,7 +71,7 @@ public class StationsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_stations, container, false);
 
 
-        // Configuring the recycler view
+        // Creating and configuring the recycler view
         RecyclerView recyclerView = v.findViewById(R.id.recycler_stations);
         recyclerView.setHasFixedSize(true);     // Gives us some optimizations
         recyclerView.addItemDecoration(new HorizontalSpaceItemDecorator(30));   // Spacing between station icons
@@ -99,6 +101,7 @@ public class StationsFragment extends Fragment {
         // A recycler view needs a layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
         recyclerView.setLayoutManager(layoutManager);
 
 
@@ -108,7 +111,7 @@ public class StationsFragment extends Fragment {
 
 
     // For adding space between station icons
-    class HorizontalSpaceItemDecorator extends RecyclerView.ItemDecoration {
+    public static class HorizontalSpaceItemDecorator extends RecyclerView.ItemDecoration {
 
         private final int spacer;
 
@@ -120,6 +123,7 @@ public class StationsFragment extends Fragment {
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
             outRect.right = spacer;
+            outRect.left = spacer;
             outRect.bottom = spacer;
             outRect.top = spacer;
         }

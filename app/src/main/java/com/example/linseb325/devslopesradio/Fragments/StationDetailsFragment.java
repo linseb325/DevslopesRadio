@@ -3,11 +3,15 @@ package com.example.linseb325.devslopesradio.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.linseb325.devslopesradio.Adapters.PlaylistsAdapter;
 import com.example.linseb325.devslopesradio.R;
+import com.example.linseb325.devslopesradio.Services.DataService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,14 +19,10 @@ import com.example.linseb325.devslopesradio.R;
  * create an instance of this fragment.
  */
 public class StationDetailsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_STATION_NAME = "selectedStationName";
+
+    private String selectedStationName;
 
 
     public StationDetailsFragment() {
@@ -33,16 +33,14 @@ public class StationDetailsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param selectedStationName The name of the station we're about to show playlists for.
      * @return A new instance of fragment StationDetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static StationDetailsFragment newInstance(String param1, String param2) {
+
+    public static StationDetailsFragment newInstance(String selectedStationName) {
         StationDetailsFragment fragment = new StationDetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_STATION_NAME, selectedStationName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,8 +49,7 @@ public class StationDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.selectedStationName = getArguments().getString(ARG_STATION_NAME);
         }
     }
 
@@ -60,7 +57,28 @@ public class StationDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_station_details, container, false);
+        View v = inflater.inflate(R.layout.fragment_station_details, container, false);
+
+        // Create and configure the recycler view.
+        RecyclerView recyclerView = v.findViewById(R.id.recycler_playlists);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new StationsFragment.HorizontalSpaceItemDecorator(30));
+
+
+        // A recycler view needs an adapter.
+        PlaylistsAdapter adapter = new PlaylistsAdapter(DataService.getInstance().getPlaylistsForStation(this.selectedStationName));
+        recyclerView.setAdapter(adapter);
+
+
+        // A recycler view also needs a layout manager.
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
+        return v;
     }
 
 }

@@ -37,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadStationDetailsScreen(Station selectedStation) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StationDetailsFragment()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, StationDetailsFragment.newInstance(selectedStation.getTitle())).addToBackStack(null).commit();
     }
+
+
 
 
 

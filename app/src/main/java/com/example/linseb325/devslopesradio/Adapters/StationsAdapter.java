@@ -36,7 +36,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Load the details screen
+                // When a station is tapped, load the details screen.
                 MainActivity.getMainActivity().loadStationDetailsScreen(stations.get(position));
             }
         });
@@ -49,6 +49,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationViewHolder> {
     }
 
 
+    // Creates and returns the view that the ViewHolder will hold.
     @Override
     public StationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
